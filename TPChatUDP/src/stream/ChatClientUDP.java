@@ -1,6 +1,8 @@
 package stream;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.UnknownHostException;
@@ -13,20 +15,32 @@ public class ChatClientUDP extends Thread {
 	
 	private int groupPort;
 	
+	private BufferedReader stdIn;
+	
+	private String pseudo;
+	
 	private ChatEnvoie envoie;
 	
 	private ChatReception reception;
 	
-	public ChatClientUDP () {
+	public ChatClientUDP (String host, int port) {
 		try {
-			groupAddr = InetAddress.getByName("228.5.6.7");
-			groupPort = 6789;
+			groupAddr = InetAddress.getByName(host);
+			groupPort = port;
 			s = new MulticastSocket(groupPort);
 			// Join the group
 		    s.joinGroup(groupAddr);
 		    
-		    envoie = new ChatEnvoie(s,groupAddr,groupPort);
-		    reception = new ChatReception(s);
+		    stdIn = new BufferedReader(new InputStreamReader(System.in));
+
+			System.out.println("Veuillez entrer le pseudo vous identifiant sur le chat :");
+			String line=stdIn.readLine();
+			while (line==null) line=stdIn.readLine();
+			pseudo=line;
+			System.out.println("Vous pouvez commencer l'échange (pour quitter écrivez 'quitter') :");
+			
+		    envoie = new ChatEnvoie(this,pseudo,s,groupAddr,groupPort);
+		    reception = new ChatReception(pseudo,s);
 		    
 		    envoie.start();
 		    reception.start();
@@ -43,7 +57,7 @@ public class ChatClientUDP extends Thread {
 	**/
 	public static void main(String[] args) throws IOException {
 
-	   ChatClientUDP c = new ChatClientUDP();
+	   ChatClientUDP c = new ChatClientUDP("228.5.6.7",6789);
 	        
 	   c.start();
  
@@ -52,6 +66,11 @@ public class ChatClientUDP extends Thread {
 	public void close() {
 		try {
 			s.leaveGroup(groupAddr);
+			envoie.stop();
+			reception.stop();
+			s.close();
+			this.stop();
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

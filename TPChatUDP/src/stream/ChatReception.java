@@ -10,8 +10,11 @@ public class ChatReception extends Thread {
 
 	private MulticastSocket s;
 	
+	private String pseudo;
 	
-	public ChatReception(MulticastSocket s){
+	
+	public ChatReception(String pseudo,MulticastSocket s){
+		this.pseudo=pseudo;
 		this.s=s;
 	}
 	
@@ -31,7 +34,10 @@ public class ChatReception extends Thread {
 				String msg = new String(recv.getData(), 0,
 						recv.getLength());
 				
-				System.out.println(msg);
+				String [] words = msg.split(" ");
+				String pseudoRecu = words[1];
+				
+				if(!pseudoRecu.contentEquals(pseudo)) System.out.println(msg);
 				//System.out.println(buf.toString());
 			}
 		}catch(Exception e) {
