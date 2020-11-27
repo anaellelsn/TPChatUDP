@@ -12,6 +12,12 @@ public class ChatReception extends Thread {
 	
 	private String pseudo;
 	
+	/**
+	 * Creates a thread to receive messages
+	 * @param pseudo
+	 * @param s
+	 */
+	
 	
 	public ChatReception(String pseudo,MulticastSocket s){
 		this.pseudo=pseudo;

@@ -20,6 +20,15 @@ public class ChatEnvoie extends Thread {
 	
 	private BufferedReader stdIn;
 	
+	/**
+	 * Creates a thread to send messages 
+	 * @param chat
+	 * @param pseudo
+	 * @param s
+	 * @param groupAddr
+	 * @param groupPort
+	 */
+	
 	public ChatEnvoie(ChatClientUDP chat,String pseudo,MulticastSocket s,InetAddress groupAddr,int groupPort){
 		this.chat=chat;
 		this.pseudo=pseudo;

@@ -9,6 +9,7 @@ import java.net.UnknownHostException;
 
 public class ChatClientUDP extends Thread {
 
+	
 	private MulticastSocket s;
 	
 	private InetAddress groupAddr;
@@ -22,6 +23,12 @@ public class ChatClientUDP extends Thread {
 	private ChatEnvoie envoie;
 	
 	private ChatReception reception;
+	
+	/**
+	 * Create a new client chat using UDP
+	 * @param host
+	 * @param port
+	 */
 	
 	public ChatClientUDP (String host, int port) {
 		try {
@@ -37,7 +44,7 @@ public class ChatClientUDP extends Thread {
 			String line=stdIn.readLine();
 			while (line==null) line=stdIn.readLine();
 			pseudo=line;
-			System.out.println("Vous pouvez commencer l'échange (pour quitter écrivez 'quitter') :");
+			System.out.println("Vous pouvez commencer l'echange (pour quitter ecrivez 'quitter') :");
 			
 		    envoie = new ChatEnvoie(this,pseudo,s,groupAddr,groupPort);
 		    reception = new ChatReception(pseudo,s);
@@ -63,6 +70,9 @@ public class ChatClientUDP extends Thread {
  
     }
 	
+	/**
+	 * Closing method used to leave the chat
+	 */
 	public void close() {
 		try {
 			s.leaveGroup(groupAddr);
