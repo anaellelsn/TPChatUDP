@@ -1,5 +1,9 @@
 package stream;
 
+/**
+ * @author Anaelle Lesne & Agathe Liguori
+ */
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.DatagramPacket;
